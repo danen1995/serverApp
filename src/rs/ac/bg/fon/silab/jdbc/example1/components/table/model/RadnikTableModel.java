@@ -19,7 +19,7 @@ import rs.ac.bg.fon.silab.jdbc.example1.domen.RadnikEntity;
 public class RadnikTableModel extends AbstractTableModel {
 
     private final List<RadnikEntity> radnici;
-    private String [] columnNames = new String[]{"ID radnika","Ime","Prezime"};
+    private String[] columnNames = new String[]{"ID radnika", "Ime", "Prezime"};
 
     public RadnikTableModel(List<RadnikEntity> radnici) {
         this.radnici = radnici;
@@ -33,7 +33,7 @@ public class RadnikTableModel extends AbstractTableModel {
     public int getRowCount() {
         //ternarni operator
         return radnici == null ? 0 : radnici.size();
-        
+
     }
 
     @Override
@@ -71,5 +71,4 @@ public class RadnikTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    
 }

@@ -37,6 +37,7 @@ public class FServer extends javax.swing.JFrame {
         initComponents();
         jBtnStopServer.setEnabled(false);
         jPanel1.setVisible(false);
+        tabela();
     }
 
     /**
@@ -147,12 +148,12 @@ public class FServer extends javax.swing.JFrame {
     private void jBtnStartServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnStartServerActionPerformed
         if(server == null || !server.isAlive()){
             try {
-                server = new ThreadServer(9009);
+                server = new ThreadServer(9009, this);
                 server.start();
                 jBtnStartServer.setEnabled(false);
                 jBtnStopServer.setEnabled(true);
-                NitOsveziUlogovaneRadnike nit = new NitOsveziUlogovaneRadnike(this);
-                nit.start();
+//                NitOsveziUlogovaneRadnike nit = new NitOsveziUlogovaneRadnike(this);
+//                nit.start();
                 jPanel1.setVisible(true);
 //                JOptionPane.showMessageDialog(this, "Server je pokrenut");
             } catch (IOException ex) {

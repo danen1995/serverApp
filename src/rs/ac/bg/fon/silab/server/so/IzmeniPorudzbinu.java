@@ -5,22 +5,21 @@
  */
 package rs.ac.bg.fon.silab.server.so;
 
-
 import rs.ac.bg.fon.silab.jdbc.example1.domen.IDomainEntity;
-import rs.ac.bg.fon.silab.jdbc.example1.domen.KupacEntity;
-import rs.ac.bg.fon.silab.jdbc.example1.domen.ProizvodEntity;
+import rs.ac.bg.fon.silab.jdbc.example1.domen.PorudzbinaEntity;
 
 /**
  *
  * @author FON
  */
-public class SacuvajProizvod extends AbstractGenericOperation {
+public class IzmeniPorudzbinu extends AbstractGenericOperation {
+
+    PorudzbinaEntity porudzbina;
 
     @Override
     protected void validate(IDomainEntity ide) throws Exception {
-        if (ide instanceof ProizvodEntity) {
-            ProizvodEntity pr = (ProizvodEntity) ide;
-            System.out.println(pr.toString());
+        if (ide instanceof PorudzbinaEntity) {
+            porudzbina = (PorudzbinaEntity) ide;
         } else {
             throw new Exception("Error in parametar");
         }
@@ -28,7 +27,7 @@ public class SacuvajProizvod extends AbstractGenericOperation {
 
     @Override
     protected void execute(IDomainEntity ide) throws Exception {
-        db.save(ide);
+        db.izmeni(ide);
     }
 
 }

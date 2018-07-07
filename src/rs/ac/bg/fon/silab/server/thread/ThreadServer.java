@@ -64,7 +64,7 @@ public class ThreadServer extends Thread{
         this.interrupt();
     }
 
-    public void dodajFizioterapeuta(ThreadClient client) {
+    public void dodajRadnika(ThreadClient client) {
         ulogovaniRadnici.add(client);
         RadnikTableModel model = (RadnikTableModel) gui.getTabela().getModel();
         model.dodaj(client.getRadnik());

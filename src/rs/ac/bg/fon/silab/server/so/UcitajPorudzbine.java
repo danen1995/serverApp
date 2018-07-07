@@ -5,16 +5,17 @@
  */
 package rs.ac.bg.fon.silab.server.so;
 
-
+import java.util.List;
 import rs.ac.bg.fon.silab.jdbc.example1.domen.IDomainEntity;
-import rs.ac.bg.fon.silab.jdbc.example1.domen.KupacEntity;
 import rs.ac.bg.fon.silab.jdbc.example1.domen.PorudzbinaEntity;
 
 /**
  *
  * @author FON
  */
-public class SacuvajPorudzbinu extends AbstractGenericOperation {
+public class UcitajPorudzbine extends AbstractGenericOperation {
+
+    List<IDomainEntity> lista;
 
     @Override
     protected void validate(IDomainEntity ide) throws Exception {
@@ -27,7 +28,11 @@ public class SacuvajPorudzbinu extends AbstractGenericOperation {
 
     @Override
     protected void execute(IDomainEntity ide) throws Exception {
-        db.save(ide);
+        lista = db.vratiSve(ide);
+    }
+
+    public List<IDomainEntity> getLista() {
+        return lista;
     }
 
 }

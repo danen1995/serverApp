@@ -291,7 +291,7 @@ public IDomainEntity save(IDomainEntity ide) throws Exception {
 
     public IDomainEntity nadjiPoIDu(IDomainEntity ide, Long x) throws Exception {
         Connection connection = DatabaseConnection.getInstance().getConnection();
-        String query = "SELECT * FROM " + ide.getTableName() + " WHERE " + ide.vratiPrimarniKljuc() + "=?";
+        String query = "SELECT * FROM " + ide.getTableName() +ide.vratiStringZaJOIN()+" WHERE " + ide.vratiPrimarniKljuc() + "=?";
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setLong(1, x);
         ResultSet rs = ps.executeQuery();
@@ -306,7 +306,7 @@ public IDomainEntity save(IDomainEntity ide) throws Exception {
     
     public IDomainEntity nadjiPoIDu(IDomainEntity ide, Integer x) throws Exception {
         Connection connection = DatabaseConnection.getInstance().getConnection();
-        String query = "SELECT * FROM " + ide.getTableName() + " WHERE " + ide.vratiPrimarniKljuc() + "=?";
+        String query = "SELECT * FROM " + ide.getTableName() +ide.vratiStringZaJOIN()+ " WHERE " + ide.vratiPrimarniKljuc() + "=?";
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setInt(1, x);
         ResultSet rs = ps.executeQuery();
@@ -321,7 +321,8 @@ public IDomainEntity save(IDomainEntity ide) throws Exception {
 
     public IDomainEntity nadjiPoIDu(IDomainEntity ide, String x) throws Exception {
         Connection connection = DatabaseConnection.getInstance().getConnection();
-        String query = "SELECT * FROM " + ide.getTableName() + " WHERE " + ide.vratiPrimarniKljuc() + "=?";
+        String query = "SELECT * FROM " + ide.getTableName()+ide.vratiStringZaJOIN() + " WHERE " + ide.vratiPrimarniKljuc() + "=?";
+        System.out.println(query);
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setString(1, x);
         ResultSet rs = ps.executeQuery();
@@ -337,7 +338,7 @@ public IDomainEntity save(IDomainEntity ide) throws Exception {
     public List<IDomainEntity> vratiSve(IDomainEntity ide) throws Exception {
         List<IDomainEntity> lista = new ArrayList<>();
         Connection connection = DatabaseConnection.getInstance().getConnection();
-        String query = "SELECT * FROM " + ide.getTableName()+ide.vratiStringZaJOIN();;
+        String query = "SELECT * FROM " + ide.getTableName()+ide.vratiStringZaJOIN();
         Statement s = connection.createStatement();
         ResultSet rs = s.executeQuery(query);
         while (rs.next()) {
@@ -375,8 +376,8 @@ public IDomainEntity save(IDomainEntity ide) throws Exception {
     public List<StavkaPorudzbineEntity> vratiStavkeZaPorudzbinu(Long idP) throws Exception{
         List<StavkaPorudzbineEntity> lista = new ArrayList<>();
         Connection connection = DatabaseConnection.getInstance().getConnection();
-        System.out.println(new StavkaPorudzbineEntity().getTableName());
-        String query = "SELECT * FROM " + new StavkaPorudzbineEntity().getTableName()+ " WHERE idPorudzbine_fk="+idP;
+        String query = "SELECT * FROM " + new StavkaPorudzbineEntity().getTableName()+new StavkaPorudzbineEntity().vratiStringZaJOIN()+ " WHERE stavka_porudzbine.idPorudzbine_fk="+idP;
+        System.out.println(query);
         Statement s = connection.createStatement();
         ResultSet rs = s.executeQuery(query);
         System.out.println(query);
@@ -405,4 +406,23 @@ public IDomainEntity save(IDomainEntity ide) throws Exception {
         Statement s = connection.createStatement();
         s.executeUpdate(query);
     }
+    
+    public boolean obrisi(IDomainEntity ide) throws Exception {
+        Connection connection = DatabaseConnection.getInstance().getConnection();
+        StringBuilder sb = new StringBuilder();
+        sb.append("DELETE FROM ")
+                .append(ide.getTableName())
+                .append(" WHERE ")
+                .append(ide.vratiPrimarniKljuc())
+                .append("=")
+                .append(ide.vratiVrednostPrimarnogKljucaString());
+
+        String query = sb.toString();
+        System.out.println("Query: " + query);
+        Statement s = connection.createStatement();
+        s.executeUpdate(query);
+        s.close();
+        return true;
+    }
+   
 }

@@ -5,20 +5,22 @@
  */
 package rs.ac.bg.fon.silab.server.so;
 
+import java.util.List;
 import rs.ac.bg.fon.silab.jdbc.example1.domen.IDomainEntity;
-import rs.ac.bg.fon.silab.jdbc.example1.domen.KupacEntity;
-import rs.ac.bg.fon.silab.jdbc.example1.domen.StavkaPorudzbineEntity;
+import rs.ac.bg.fon.silab.jdbc.example1.domen.MestoEntity;
 
 /**
  *
- * @author Antic
+ * @author FON
  */
-public class SacuvajStavkuPorudzbine extends AbstractGenericOperation{
+public class UcitajListuMesta extends AbstractGenericOperation {
+
+    List<IDomainEntity> lista;
+
     @Override
     protected void validate(IDomainEntity ide) throws Exception {
-        if (ide instanceof StavkaPorudzbineEntity) {
-            StavkaPorudzbineEntity stavka = (StavkaPorudzbineEntity) ide;
-            System.out.println(stavka.toString());
+        if (ide instanceof MestoEntity) {
+            MestoEntity mesto = (MestoEntity) ide;
         } else {
             throw new Exception("Error in parametar");
         }
@@ -26,7 +28,11 @@ public class SacuvajStavkuPorudzbine extends AbstractGenericOperation{
 
     @Override
     protected void execute(IDomainEntity ide) throws Exception {
-        db.save(ide);
+        lista = db.vratiSve(ide);
+    }
+
+    public List<IDomainEntity> getLista() {
+        return lista;
     }
 
 }
