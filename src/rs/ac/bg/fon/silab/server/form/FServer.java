@@ -39,8 +39,9 @@ public class FServer extends javax.swing.JFrame {
         jBtnStopServer.setEnabled(false);
         jPanel1.setVisible(false);
         tabela();
-//        NitOsveziPorudzbinu os = new NitOsveziPorudzbinu();
-//        os.start();
+        setLocationRelativeTo(null);
+        NitOsveziPorudzbinu os = new NitOsveziPorudzbinu();
+        os.start();
     }
 
     /**
