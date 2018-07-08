@@ -17,6 +17,7 @@ import rs.ac.bg.fon.silab.jdbc.example1.domen.PorudzbinaEntity;
 import rs.ac.bg.fon.silab.jdbc.example1.domen.ProizvodEntity;
 import rs.ac.bg.fon.silab.jdbc.example1.domen.RadnikEntity;
 import rs.ac.bg.fon.silab.jdbc.example1.domen.StavkaPorudzbineEntity;
+import rs.ac.bg.fon.silab.jdbc.example1.domen.TipProizvodaEntity;
 import rs.ac.bg.fon.silab.server.so.AbstractGenericOperation;
 import rs.ac.bg.fon.silab.server.so.IzmeniKupca;
 import rs.ac.bg.fon.silab.server.so.IzmeniPorudzbinu;
@@ -75,34 +76,6 @@ public class ThreadClient extends Thread {
                 //obradi zahtev
                 ResponseObject responseObject = new ResponseObject();
                 switch (request.getOperation()) {
-//                    case IOperation.SACUVAJ:
-//                        IDomainEntity ide1 = (IDomainEntity) request.getData();
-//                        try {
-//                            if (ide1 instanceof KupacEntity) {
-//                                AbstractGenericOperation sacuvajKupca = new SacuvajKupca();
-//                                sacuvajKupca.templateExecute(ide1);
-//                            }
-//                            if (ide1 instanceof ProizvodEntity) {
-//                                AbstractGenericOperation sacuvajProizvod = new SacuvajProizvod();
-//                                sacuvajProizvod.templateExecute(ide1);
-//                            }
-//                            if (ide1 instanceof PorudzbinaEntity) {
-//                                AbstractGenericOperation sacuvajPorudzbinu = new SacuvajPorudzbinu();
-//                                sacuvajPorudzbinu.templateExecute(ide1);
-//                            }
-//                            if (ide1 instanceof StavkaPorudzbineEntity) {
-//                                AbstractGenericOperation sacuvajStavkuPorudzbine = new SacuvajStavkuPorudzbine();
-//                                sacuvajStavkuPorudzbine.templateExecute(ide1);
-//                            }
-//                            responseObject.setCode(IStatus.OK);
-//                            responseObject.setData(ide1);
-//                        } catch (Exception e) {
-//                            System.out.println(e.getMessage());
-//                            responseObject.setCode(IStatus.ERROR);
-//                            responseObject.setMessage(e.getMessage());
-//                        }
-//
-//                        break;
                     case IOperation.odjava:
                         try {
 //                            this.socket.close();System.out.println("d");
@@ -114,21 +87,9 @@ public class ThreadClient extends Thread {
                             responseObject.setMessage(e.getMessage());
                         }
                         break;
-//                    case IOperation.VRATI_SVE:
-//                        IDomainEntity ide = (IDomainEntity) request.getData();
-//                        try {
-//                            List<IDomainEntity> lista = new DatabaseRepository().vratiSve(ide);
-//                            responseObject.setCode(IStatus.OK);
-//                            responseObject.setData(lista);
-//                        } catch (Exception e) {
-//                            responseObject.setCode(IStatus.ERROR);
-//                            responseObject.setMessage(e.getMessage());
-//                        }
-//
-//                        break;
                     case IOperation.VRATI_SVE_PROIZVODE:
                         try {
-                            UcitajProizvode ucitajProizvode= new UcitajProizvode();
+                            UcitajProizvode ucitajProizvode = new UcitajProizvode();
                             ucitajProizvode.templateExecute((IDomainEntity) request.getData());
                             List<IDomainEntity> listaZaVracanje = ucitajProizvode.getLista();
                             responseObject.setCode(IStatus.OK);
@@ -140,9 +101,20 @@ public class ThreadClient extends Thread {
                         break;
                     case IOperation.VRATI_SVE_PORUDZBINE:
                         try {
-                            UcitajPorudzbine ucitajPorudzbine  = new UcitajPorudzbine();
+                            UcitajPorudzbine ucitajPorudzbine = new UcitajPorudzbine();
                             ucitajPorudzbine.templateExecute((IDomainEntity) request.getData());
                             List<IDomainEntity> listaZaVracanje2 = ucitajPorudzbine.getLista();
+                            responseObject.setCode(IStatus.OK);
+                            responseObject.setData(listaZaVracanje2);
+                        } catch (Exception e) {
+                            responseObject.setCode(IStatus.ERROR);
+                            responseObject.setMessage(e.getMessage());
+                        }
+                        break;
+                    case IOperation.VRATI_SVE_PORUDZBINE_ZA_KUPCA:
+                        String jmbgK = (String) request.getData();
+                        try {
+                            List<PorudzbinaEntity> listaZaVracanje2 = new DatabaseRepository().vratiSvePorudzbineZaKupca(jmbgK);
                             responseObject.setCode(IStatus.OK);
                             responseObject.setData(listaZaVracanje2);
                         } catch (Exception e) {
@@ -157,6 +129,22 @@ public class ThreadClient extends Thread {
                             List<IDomainEntity> listaZaVracanje2 = ucitajTipoveProizvoda.getLista();
                             responseObject.setCode(IStatus.OK);
                             responseObject.setData(listaZaVracanje2);
+                        } catch (Exception e) {
+                            responseObject.setCode(IStatus.ERROR);
+                            responseObject.setMessage(e.getMessage());
+                        }
+                        break;
+                    case IOperation.VRATI_TIPOVE_PROIZVODA_PO_ID:
+                        Long x = (Long) request.getData();
+                        try {
+//                            TipProizvodaEntity tt = new TipProizvodaEntity();
+//                            tt.setIdTipaProizvoda(x);
+//                            UcitajTipProizvoda ucitajTip = new UcitajTipProizvoda();
+//                            ucitajTip.templateExecute(tt);
+//                            TipProizvodaEntity tip = (TipProizvodaEntity) ucitajTip.vratiObjekat();
+                            TipProizvodaEntity tip = (TipProizvodaEntity) new DatabaseRepository().nadjiPoIDu(new TipProizvodaEntity(), x);
+                            responseObject.setCode(IStatus.OK);
+                            responseObject.setData(tip);
                         } catch (Exception e) {
                             responseObject.setCode(IStatus.ERROR);
                             responseObject.setMessage(e.getMessage());
@@ -197,20 +185,7 @@ public class ThreadClient extends Thread {
                             responseObject.setCode(IStatus.ERROR);
                             responseObject.setMessage(e.getMessage());
                         }
-//                    case IOperation.SACUVAJ_KUPCA:
-//                        KupacEntity kupac = (KupacEntity) request.getData();
-//                        try {
-//                            //company = new DatabaseRepository().saveCompany(company);
-//                            AbstractGenericOperation sacuvajKupaca = new SacuvajKupca();
-//                            sacuvajKupaca.templateExecute(kupac);
-//                            //company mora da sadrzi ID!
-//                            responseObject.setCode(IStatus.OK);
-//                            responseObject.setData(kupac);
-//                        } catch (Exception e) {
-//                            responseObject.setCode(IStatus.ERROR);
-//                            responseObject.setMessage(e.getMessage());
-//                        }
-
+                        break;
                     case IOperation.logovanje:
                         RadnikEntity r = (RadnikEntity) request.getData();
                         try {
@@ -281,34 +256,6 @@ public class ThreadClient extends Thread {
                             responseObject.setMessage(e.getMessage());
                         }
                         break;
-//                    case IOperation.IZMENI:
-//                        IDomainEntity ide2 = (IDomainEntity) request.getData();
-//                        try {
-//                            if (ide2 instanceof KupacEntity) {
-//                                ide2 = (KupacEntity) ide2;
-//                                AbstractGenericOperation izmeniKupca = new IzmeniKupca();
-//                                izmeniKupca.templateExecute(ide2);
-//                            }
-//                            if (ide2 instanceof ProizvodEntity) {
-//                                ide2 = (ProizvodEntity) ide2;
-//                                AbstractGenericOperation izmeniPacijenta = new IzmeniProizvod();
-//                                izmeniPacijenta.templateExecute(ide2);
-//                            }
-////                            if (ide2 instanceof Pregled) {
-////                                ide2 = (Pregled) ide2;
-////                                AbstractGenericOperation izmeniPregled = new IzmeniPregled();
-////                                izmeniPregled.templateExecute(ide2);
-////                            }
-//                            //company mora da sadrzi ID!
-//                            responseObject.setCode(IStatus.OK);
-//                            responseObject.setData(ide2);
-//                        } catch (Exception e) {
-//                            System.out.println(e.getMessage() + e.getStackTrace());
-//                            responseObject.setCode(IStatus.ERROR);
-//                            responseObject.setMessage(e.getMessage());
-//                        }
-//
-//                        break;
                     case IOperation.OBRISI_PROIZVOD:
                         try {
                             AbstractGenericOperation obrisiProizvod = new ObrisiProizvod();
@@ -378,35 +325,9 @@ public class ThreadClient extends Thread {
                             responseObject.setMessage(e.getMessage());
                         }
                         break;
-                    case IOperation.ZAPAMTI_STAVKU:
-                        StavkaPorudzbineEntity stavka = (StavkaPorudzbineEntity) request.getData();
-                        System.out.println(stavka);
-                        System.out.println("*******");
-                        try {
-                            new DatabaseRepository().save(stavka);
-                            responseObject.setCode(IStatus.OK);
-                            responseObject.setData((IDomainEntity) request.getData());
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage() + e.getStackTrace());
-                            responseObject.setCode(IStatus.ERROR);
-                            responseObject.setMessage(e.getMessage());
-                        }
-                        break;
-//                    case IOperation.ZAPAMTI_LISTU_PREGLEDA:
-//                        List<Pregled> pregledi = (List<Pregled>) request.getData();
-//                        try {
-//                            boolean uspesno = new DatabaseRepository().zapamtiPreglede(pregledi);
-//                            responseObject.setCode(IStatus.OK);
-//                            responseObject.setData(uspesno);
-//                        } catch (Exception e) {
-//                            System.out.println(e.getMessage() + e.getStackTrace());
-//                            responseObject.setCode(IStatus.ERROR);
-//                            responseObject.setMessage(e.getMessage());
-//                        }
-//                        break;
                     case IOperation.IZMENI_PROIZVOD:
                         try {
-                            AbstractGenericOperation izmeniProizvod= new IzmeniProizvod();
+                            AbstractGenericOperation izmeniProizvod = new IzmeniProizvod();
                             izmeniProizvod.templateExecute((IDomainEntity) request.getData());
 
                             responseObject.setCode(IStatus.OK);
@@ -437,6 +358,20 @@ public class ThreadClient extends Thread {
 
                             responseObject.setCode(IStatus.OK);
                             responseObject.setData((IDomainEntity) request.getData());
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage() + e.getStackTrace());
+                            responseObject.setCode(IStatus.ERROR);
+                            responseObject.setMessage(e.getMessage());
+                        }
+                        break;
+                    case IOperation.IZMENI_STAVKE:
+                        List<StavkaPorudzbineEntity> stavke = (List<StavkaPorudzbineEntity>) request.getData();
+                        try {
+                            new DatabaseRepository().obrisiStavkeZaPorudzbinu(stavke.get(0).getPorudzbina());
+                            for (StavkaPorudzbineEntity stavkaPorudzbineEntity : stavke) {
+                                new DatabaseRepository().ubaciStavku(stavkaPorudzbineEntity);
+                            }
+                            responseObject.setCode(IStatus.OK);
                         } catch (Exception e) {
                             System.out.println(e.getMessage() + e.getStackTrace());
                             responseObject.setCode(IStatus.ERROR);

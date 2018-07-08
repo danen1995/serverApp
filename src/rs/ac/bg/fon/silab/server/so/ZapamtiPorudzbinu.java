@@ -27,7 +27,7 @@ public class ZapamtiPorudzbinu extends AbstractGenericOperation {
 
     @Override
     protected void execute(IDomainEntity ide) throws Exception {
-        db.save(ide);
+        db.zapamtiSlozen(ide);
     }
 
 }

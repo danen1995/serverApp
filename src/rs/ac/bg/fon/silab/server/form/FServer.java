@@ -20,6 +20,7 @@ import rs.ac.bg.fon.silab.jdbc.example1.db.DatabaseRepository;
 import rs.ac.bg.fon.silab.jdbc.example1.domen.IDomainEntity;
 import rs.ac.bg.fon.silab.jdbc.example1.domen.KupacEntity;
 import rs.ac.bg.fon.silab.jdbc.example1.domen.RadnikEntity;
+import rs.ac.bg.fon.silab.server.thread.NitOsveziPorudzbinu;
 import rs.ac.bg.fon.silab.server.thread.NitOsveziUlogovaneRadnike;
 import rs.ac.bg.fon.silab.server.thread.ThreadClient;
 import rs.ac.bg.fon.silab.server.thread.ThreadServer;
@@ -38,6 +39,8 @@ public class FServer extends javax.swing.JFrame {
         jBtnStopServer.setEnabled(false);
         jPanel1.setVisible(false);
         tabela();
+//        NitOsveziPorudzbinu os = new NitOsveziPorudzbinu();
+//        os.start();
     }
 
     /**
