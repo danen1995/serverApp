@@ -138,7 +138,6 @@ public class DatabaseRepository {
         List<IDomainEntity> lista = new ArrayList<>();
         Connection connection = DatabaseConnection.getInstance().getConnection();
         String query = "SELECT * FROM " + ide.getTableName() + ide.vratiStringZaJOIN();
-        System.out.println(query);
         Statement s = connection.createStatement();
         ResultSet rs = s.executeQuery(query);
         while (rs.next()) {
@@ -344,26 +343,21 @@ public class DatabaseRepository {
         rs.close();
         s.close();
         return lista;
-//        Connection connection = DatabaseConnection.getInstance().getConnection();
-//        String query = "SELECT * FROM porudzbina WHERE jmbgKupca_fk=?";
-//        PreparedStatement ps = connection.prepareStatement(query);
-//        ps.setString(1, jmbgK);
-//        ResultSet rs = ps.executeQuery();
-//        while (rs.next()) {
-//            Long id = rs.getLong(1);
-//            Date datumPor = rs.getDate(2);
-//            String status = rs.getString(3);
-//            Double ukIznos = rs.getDouble(4);
-//            Double ukIznos = rs.getDouble(4);
-//            Double ukIznos = rs.getDouble(4);
-//            
-//            String adresa = rs.getString(6);
-//            RadnikEntity radnik = new RadnikEntity(id, ime, prezime, new java.util.Date(datumZaposlenja.getTime()), new java.util.Date(datumROdjenja.getTime()), adresa, r.getKorisnickoIme(), r.getLozinka());
-//
-//            rs.close();
-//            ps.close();
-//
-//            return radnik;
+    }
+
+    public List<PorudzbinaEntity> vratiSvePorudzbineFilter(String filter) throws Exception{
+        List<PorudzbinaEntity> lista = new ArrayList<>();
+        Connection connection = DatabaseConnection.getInstance().getConnection();
+        String query = "SELECT * FROM " + new PorudzbinaEntity().getTableName() + new PorudzbinaEntity().vratiStringZaJOIN()+filter;
+        System.out.println(query);
+        Statement s = connection.createStatement();
+        ResultSet rs = s.executeQuery(query);
+        while (rs.next()) {
+            lista.add((PorudzbinaEntity) new PorudzbinaEntity().vratiObjekat(rs));
+        }
+        rs.close();
+        s.close();
+        return lista;
     }
 
 }

@@ -122,6 +122,17 @@ public class ThreadClient extends Thread {
                             responseObject.setMessage(e.getMessage());
                         }
                         break;
+                    case IOperation.VRATI_SVE_PORUDZBINE_FILTER:
+                        String filter = (String) request.getData();
+                        try {
+                            List<PorudzbinaEntity> listaZaVracanje2 = new DatabaseRepository().vratiSvePorudzbineFilter(filter);
+                            responseObject.setCode(IStatus.OK);
+                            responseObject.setData(listaZaVracanje2);
+                        } catch (Exception e) {
+                            responseObject.setCode(IStatus.ERROR);
+                            responseObject.setMessage(e.getMessage());
+                        }
+                        break;
                     case IOperation.VRATI_SVE_TIPOVE_PROIZVODA:
                         try {
                             UcitajTipoveProizvoda ucitajTipoveProizvoda = new UcitajTipoveProizvoda();
